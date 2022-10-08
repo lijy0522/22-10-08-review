@@ -1,0 +1,73 @@
+<!--
+ * @Author: lijy
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>call与apply</title>
+  </head>
+  <body>
+    <script>
+      // 他们的共同点是，都能够改变函数执行时的上下文，将一个对象的方法
+      // 交给另一个对象来执行，而且是立即执行。
+      // call() 的第二个函数开始，接收任意个参数为函数
+      // apply() 的第二个函数开始，接收任意个参数为数组
+
+      // call() 方法使用一个指定的 this 值和单独给出的一个或者多个参数来调用一个函数
+      Function.prototype.myCall = function (_this, ...args) {
+        // 改变this的指向
+        _this.self = this;
+        // 将其他参数传递给 reslt
+        const result = _this.self(...args);
+        // 删除这个变量
+        delete _this.self;
+        // 返回 result 结果
+        return result;
+      };
+
+      // 测试
+      function Product(name, price) {
+        this.name = name;
+        this.price = price;
+      }
+      function Food(name, price) {
+        // Product.call(this, name, price)
+        Product.myCall(this, name, price);
+        this.category = "food";
+      }
+      console.log(new Food("cheese", 5).name);
+
+      // ----------------------------------------------------------------------------
+
+      // apply()
+      Function.prototype.myApply = function (_this, args = []) {
+        // 判断 _this 是否为 null 或者 undefined
+        if (_this === null || _this === undefined) {
+          // 是的话使 _this 指向 window
+          _this = window;
+        } else {
+          // 否则 _this 包装为一个新对象
+          _this = Object(_this);
+        }
+        // 改变this的指向
+        _this.self = this;
+        // 将其他参数传递给 reslt
+        const result = _this.self(...args);
+        // 删除这个变量
+        delete _this.self;
+        // 返回 result 结果
+        return result;
+      };
+
+      // 测试
+      const numbers = [5, 6, 2, 3, 7];
+      const max = Math.max.apply(null, numbers);
+      const max1 = Math.max.myApply(null, numbers);
+      console.log(max);
+      console.log(max1);
+    </script>
+  </body>
+</html>

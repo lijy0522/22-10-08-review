@@ -1,0 +1,44 @@
+<!--
+ * @Author: lijy
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bind的实现</title>
+  </head>
+  <body>
+    <script>
+      // bind() 方法会创建一个新函数。当这个函数被调用时，bing() 的第一个参数将作为
+      // 它运行时的 this，之后的一序列参数将会在传递的实参前传入作为它的参数。
+
+      Function.prototype.myBind = function (_this, ...args) {
+        const self = this;
+        return function () {
+          return self.apply(_this, ...args);
+        };
+      };
+
+      const module = {
+        x: 42,
+        getX: function () {
+          return this.x;
+        },
+      };
+
+      const unboundGetX = module.getX;
+      console.log(unboundGetX()); 
+
+      const boundGetX = unboundGetX.bind(module);
+      console.log(boundGetX());
+      console.log('------------------')
+      const unboundGetX2 = module.getX;
+      console.log(unboundGetX2()); 
+
+      const boundGetX2 = unboundGetX2.myBind(module);
+      console.log(boundGetX2());
+    </script>
+  </body>
+</html>
