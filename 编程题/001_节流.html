@@ -1,0 +1,40 @@
+<!--
+ * @Author: lijy
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>节流</title></title>
+    <style>
+        html, body {
+            height: 500%;
+        }
+    </style>
+</head>
+<body>
+    <!-- 节流：一个函数执行一次后，只有大于设定的周期才会执行第二次 
+        用处：对于一个需要频繁触发的函数，出于性能方面的考虑，在规定的时间内，只让函数第一次触发时生效
+    -->
+    <script>
+        function throttle(fn, delay) {
+            // 记录上一次出发时间
+            let lastTime = 0
+            return function () {
+                // 记录当前函数出发时间
+                let nowTime = Date.now()
+                // 如果当前函数出发时间距离上一次触发时间大于规定的时间，则执行函数 fn
+                if(nowTime - lastTime > delay){
+                    fn.call(this)
+                    // 同步时间
+                    lastTime = nowTime
+                }
+            }
+        }
+
+        document.onscroll = throttle(() => console.log('触发了', Date.now()), 500)
+    </script>
+</body>
+</html>

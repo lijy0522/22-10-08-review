@@ -1,0 +1,30 @@
+<!--
+ * @Author: lijy
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防抖</title>
+</head>
+<body>
+    <button class="btn">按钮</button>
+    <!-- 防抖：对于一个需要频繁触发的函数，在规定时间内，只让最后一次生效 -->
+    <script>
+        function debounce(fn, delay) {
+            // 记录上一次的定时器
+            let timer = null
+            return function () {
+                // 清除定时器
+                clearTimeout(timer)
+                // 重新设置定时器
+                timer = setTimeout(fn, delay);
+            }
+        }
+
+        document.querySelector('.btn').onclick = debounce(() => console.log('防抖'),1000)
+    </script>
+</body>
+</html>
